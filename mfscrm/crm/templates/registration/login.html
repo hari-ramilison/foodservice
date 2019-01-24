@@ -1,18 +1,68 @@
 {% extends "crm/base.html" %}
-
+{% load staticfiles %}
 {% block content %}
+
+<br /><br />
+<br /><br />
+<div class="col-md-2"></div>
+<div class="col-md-8">
+    <br /><br />
     {% if form.errors %}
-    <br />
-    <p>Your username and password didn't match. Please try again.</p>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Error!</div>
+                    <div class="panel-body">
+                       <p>Your username and password didn't match. Please try again.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
     {% endif %}
-    <br />
-    <br />
-    <form method="post" action="{% url 'login' %}">
-         {{ form.as_p }}
-        {% csrf_token %}
+    {% if next %}
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Access issue!</div>
+                    <div class="panel-body">
+                        <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Login</div>
+                    <div class="panel-body">
+                        <p>Please login to see this page.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        {% endif %}
+    {% endif %}
 
 
-        <input type="submit" value="login"/>
-        <input type="hidden" name="next" value="{{ next }}"/>
-    </form>
+    <div class="row" style="text-align: center;">
+        <div class="col-md-2"></div>
+        <div class="col-md-8" style="display: inline-block;">
+            <form method="post" action="{% url 'login' %}">{% csrf_token %}
+                     {{ form.as_p }}
+                <input type="submit" value="login"/>
+                <input type="hidden" name="next" value="{{ next }}"/>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+<div class="col-md-2"></div>
 {% endblock %}

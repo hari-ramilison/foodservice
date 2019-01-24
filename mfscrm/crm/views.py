@@ -13,8 +13,9 @@ def home(request):
 @login_required
 def customer_list(request):
     customer = Customer.objects.filter(created_date__lte=timezone.now())
+    action = ""
     return render(request, 'crm/customer_list.html',
-                 {'customers': customer})
+                 {'customers': customer, 'action': action})
 
 @login_required
 def customer_new(request):
@@ -25,8 +26,9 @@ def customer_new(request):
            customer.created_date = timezone.now()
            customer.save()
            customers = Customer.objects.filter(created_date__lte=timezone.now())
+           action = "added"
            return render(request, 'crm/customer_list.html',
-                         {'customers': customers})
+                         {'customers': customers, 'action': action})
    else:
        form = CustomerForm()
        # print("Else")
@@ -43,8 +45,9 @@ def customer_edit(request, pk):
            customer.updated_date = timezone.now()
            customer.save()
            customer = Customer.objects.filter(created_date__lte=timezone.now())
+           action = "edited"
            return render(request, 'crm/customer_list.html',
-                         {'customers': customer})
+                         {'customers': customer, 'action': action})
    else:
         # edit
        form = CustomerForm(instance=customer)
@@ -54,12 +57,14 @@ def customer_edit(request, pk):
 def customer_delete(request, pk):
    customer = get_object_or_404(Customer, pk=pk)
    customer.delete()
+   action = "deleted"
    return redirect('crm:customer_list')
 
 @login_required
 def service_list(request):
    services = Service.objects.filter(created_date__lte=timezone.now())
-   return render(request, 'crm/service_list.html', {'services': services})
+   action = ""
+   return render(request, 'crm/service_list.html', {'services': services, 'action': action})
 
 @login_required
 def service_new(request):
@@ -70,8 +75,9 @@ def service_new(request):
            service.created_date = timezone.now()
            service.save()
            services = Service.objects.filter(created_date__lte=timezone.now())
+           action = "added"
            return render(request, 'crm/service_list.html',
-                         {'services': services})
+                         {'services': services, 'action': action})
    else:
        form = ServiceForm()
        # print("Else")
@@ -88,7 +94,8 @@ def service_edit(request, pk):
            service.updated_date = timezone.now()
            service.save()
            services = Service.objects.filter(created_date__lte=timezone.now())
-           return render(request, 'crm/service_list.html', {'services': services})
+           action = "edited"
+           return render(request, 'crm/service_list.html', {'services': services, 'action': action})
    else:
        # print("else")
        form = ServiceForm(instance=service)
@@ -97,7 +104,8 @@ def service_edit(request, pk):
 @login_required
 def product_list(request):
    products = Product.objects.filter(created_date__lte=timezone.now())
-   return render(request, 'crm/product_list.html', {'products': products})
+   action = ""
+   return render(request, 'crm/product_list.html', {'products': products, 'action': action})
 
 @login_required
 def product_new(request):
@@ -108,8 +116,9 @@ def product_new(request):
            product.created_date = timezone.now()
            product.save()
            products = Product.objects.filter(created_date__lte=timezone.now())
+           action = "added"
            return render(request, 'crm/product_list.html',
-                         {'products': products})
+                         {'products': products, 'action': action})
    else:
        form = ProductForm()
        # print("Else")
@@ -126,7 +135,8 @@ def product_edit(request, pk):
            product.updated_date = timezone.now()
            product.save()
            products = Product.objects.filter(created_date__lte=timezone.now())
-           return render(request, 'crm/product_list.html', {'products': products})
+           action = "edited"
+           return render(request, 'crm/product_list.html', {'products': products, 'action': action})
    else:
        # print("else")
        form = ProductForm(instance=product)

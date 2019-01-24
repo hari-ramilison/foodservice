@@ -1,9 +1,20 @@
 {% extends 'crm/base.html' %}
 {% load crispy_forms_tags %}
+{% load staticfiles %}
 {% block content %}
-    <h1>Add a New Product</h1>
-    <form method="POST" class="product-form">{% csrf_token %}
-          {{ form|crispy }}
-        <button type="submit" class="save btn btn-default">Save</button>
-    </form>
+    <div class="row">
+        <h2><br>Add a New Product<br><br></h2>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-8">
+                <form method="POST" class="product-form">{% csrf_token %}
+                        {{ form|crispy }}
+                    <div style="text-align: left;">
+                        <br><button type="submit" class="save btn btn-default">Save</button>
+                    </div>
+            </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
