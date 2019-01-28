@@ -126,3 +126,12 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/home'
+
+#EMAIL_HOST = 'smtp.mailtrap.io'
+#EMAIL_HOST_USER = 'dac13d35b0fa64'
+#EMAIL_HOST_PASSWORD = '1b415d15b7d33a'
+#EMAIL_PORT = 2525
+#EMAIL_USE_TLS = True
+#DEFAULT_FROM_EMAIL = 'Reset Password <hramilison@unomaha.edu>'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

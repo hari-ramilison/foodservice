@@ -21,4 +21,6 @@ urlpatterns = [
 
     path('customer/<int:pk>/summary/', views.summary, name='summary'),
 
+    path('register/', views.register, name='register'),
+
 ]

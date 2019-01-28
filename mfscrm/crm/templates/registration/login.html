@@ -1,5 +1,6 @@
 {% extends "crm/base.html" %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 {% block content %}
 
 <br /><br />
@@ -52,17 +53,18 @@
     {% endif %}
 
 
-    <div class="row" style="text-align: center;">
+     <div class="row" style="">
         <div class="col-md-2"></div>
-        <div class="col-md-8" style="display: inline-block;">
+        <div class="col-md-8" style="">
             <form method="post" action="{% url 'login' %}">{% csrf_token %}
-                     {{ form.as_p }}
-                <input type="submit" value="login"/>
+                     {{ form|crispy }}
+                <button type="submit" class="save btn btn-default">Login</button>
                 <input type="hidden" name="next" value="{{ next }}"/>
             </form>
+            <p><button class="btn btn-primary"><a href="{% url 'password_reset' %}">
+                <font color="black">Lost password?</font></a></button></p>
         </div>
         <div class="col-md-2"></div>
     </div>
 </div>
-<div class="col-md-2"></div>
 {% endblock %}

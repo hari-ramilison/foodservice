@@ -1,0 +1,10 @@
+{% extends "crm/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block content %}
+   <div class="row">
+        <h2><br>Welcome {{ new_user.first_name }}!<br></h2>
+        <h4>Your account has been successfully created. Now you can <a href="{% url 'login' %}">log in</a>.</h4>
+  </div>
+  {% endblock %}
