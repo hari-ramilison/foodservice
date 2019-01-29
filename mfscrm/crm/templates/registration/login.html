@@ -30,7 +30,7 @@
                 <div class="panel panel-danger">
                     <div class="panel-heading">Access issue!</div>
                     <div class="panel-body">
-                        <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+                        <p>Your account doesn't have access to this page. To proceed, please log in with an account that has access.</p>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">Login</div>
                     <div class="panel-body">
-                        <p>Please login to see this page.</p>
+                        <p>Please log in to see this page.</p>
                     </div>
                 </div>
             </div>
@@ -61,8 +61,10 @@
                 <button type="submit" class="save btn btn-default">Login</button>
                 <input type="hidden" name="next" value="{{ next }}"/>
             </form>
-            <p><button class="btn btn-primary"><a href="{% url 'password_reset' %}">
-                <font color="black">Lost password?</font></a></button></p>
+            <p align="right">
+                <a href="{% url 'password_reset' %}"><font color="black">Lost password?</font></a>&nbsp;&nbsp;
+                <a href="{% url 'crm:register' %}"><font color="black">Sign up</font></a>
+            </p>
         </div>
         <div class="col-md-2"></div>
     </div>
