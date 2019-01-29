@@ -169,11 +169,12 @@ def product_edit(request, pk):
 def summary(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     customers = Customer.objects.filter(created_date__lte=timezone.now())
+    customers = Customer.objects.filter(cust_name=pk)
     services = Service.objects.filter(cust_name=pk)
     products = Product.objects.filter(cust_name=pk)
     sum_service_charge = Service.objects.filter(cust_name=pk).aggregate(Sum('service_charge'))
     sum_product_charge = Product.objects.filter(cust_name=pk).aggregate(Sum('charge'))
-    return render(request, 'crm/summary.html', {'customers': customers,
+    return render(request, 'crm/summary.html', {'customer': customer,
                                                     'products': products,
                                                     'services': services,
                                                     'sum_service_charge': sum_service_charge,
