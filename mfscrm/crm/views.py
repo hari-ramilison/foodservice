@@ -15,11 +15,17 @@ def home(request):
                  {'crm': home})
 
 @login_required
-def customer_list(request):
-    customer = Customer.objects.filter(created_date__lte=timezone.now())
-    action = ""
-    return render(request, 'crm/customer_list.html',
-                 {'customers': customer, 'action': action})
+def customer_list(request, pk):
+    if pk == 0:
+        customer = Customer.objects.filter(created_date__lte=timezone.now())
+        action = ""
+        return render(request, 'crm/customer_list.html', {'customers': customer, 'action': action})
+    else:
+        customer = get_object_or_404(Customer, pk=pk)
+        customer.delete()
+        action = "deleted"
+        customers = Customer.objects.filter(created_date__lte=timezone.now())
+        return render(request, 'crm/customer_list.html', {'customers': customers, 'action': action})
 
 @login_required
 def customer_new(request):
@@ -65,11 +71,17 @@ def customer_delete(request, pk):
    return redirect('crm:customer_list')
 
 @login_required
-def service_list(request):
-   services = Service.objects.filter(created_date__lte=timezone.now())
-   action = ""
-   return render(request, 'crm/service_list.html', {'services': services, 'action': action})
-
+def service_list(request, pk):
+    if pk == 0:
+        services = Service.objects.filter(created_date__lte=timezone.now())
+        action = ""
+        return render(request, 'crm/service_list.html', {'services': services, 'action': action})
+    else:
+        service = get_object_or_404(Service, pk=pk)
+        service.delete()
+        action = "deleted"
+        services = Service.objects.filter(created_date__lte=timezone.now())
+        return render(request, 'crm/service_list.html', {'services': services, 'action': action})
 @login_required
 def service_new(request):
    if request.method == "POST":
@@ -106,10 +118,17 @@ def service_edit(request, pk):
    return render(request, 'crm/service_edit.html', {'form': form})
 
 @login_required
-def product_list(request):
-   products = Product.objects.filter(created_date__lte=timezone.now())
-   action = ""
-   return render(request, 'crm/product_list.html', {'products': products, 'action': action})
+def product_list(request, pk):
+   if pk == 0:
+        products = Product.objects.filter(created_date__lte=timezone.now())
+        action = ""
+        return render(request, 'crm/product_list.html', {'products': products, 'action': action})
+   else:
+       product = get_object_or_404(Product, pk=pk)
+       product.delete()
+       action = "deleted"
+       products = Product.objects.filter(created_date__lte=timezone.now())
+       return render(request, 'crm/product_list.html', {'products': products, 'action': action})
 
 @login_required
 def product_new(request):

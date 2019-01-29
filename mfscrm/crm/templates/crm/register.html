@@ -9,6 +9,7 @@
   <div class="row">
       <div class="col-md-12">
          <div class="col-md-6">
+            <div class='error'>{{form.errors.username}}</div>
             <form action="" method="post">
               {{ user_form|crispy }}
               {% csrf_token %}
