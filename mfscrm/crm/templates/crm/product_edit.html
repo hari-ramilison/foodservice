@@ -5,6 +5,27 @@
     <div class="row">
         <h2><br>Edit Product<br><br></h2>
     </div>
+    {% if form.errors %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Error!</div>
+                    <div class="panel-body">
+                       <p><font color="red">
+                           {% for field in form %}
+                            {% if field.errors %}
+                                {{ field.label_tag }}
+                                {{ field.errors }}
+                            {% endif %}
+                           {% endfor %}
+                           </font>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-8">

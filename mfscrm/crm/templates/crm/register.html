@@ -6,10 +6,30 @@
         <h2><br>Create an account<br></h2>
         <p>Please, sign up using the following form:<br><br></p>
   </div>
+  {% if user_form.errors %}
+    <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Error!</div>
+                    <div class="panel-body">
+                       <p><font color="red">
+                           {% for field in user_form %}
+                            {% if field.errors %}
+                                {{ field.label_tag }}
+                                {{ field.errors }}
+                            {% endif %}
+                           {% endfor %}
+                           </font>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6"></div>
+    </div>
+   {% endif %}
   <div class="row">
       <div class="col-md-12">
          <div class="col-md-6">
-            <div class='error'>{{form.errors.username}}</div>
             <form action="" method="post">
               {{ user_form|crispy }}
               {% csrf_token %}
