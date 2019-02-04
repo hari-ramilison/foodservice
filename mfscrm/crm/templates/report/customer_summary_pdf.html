@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{% load mathfilters %}
+{% load humanize %}
+<html>
+    <head>
+        <title>Title</title>
+        <style type="text/css">
+            body {
+                font-weight: 200;
+                font-size: 14px;
+            }
+            .header {
+                font-size: 20px;
+                font-weight: 100;
+                text-align: center;
+                color: #007cae;
+            }
+            .title {
+                font-size: 22px;
+                font-weight: 100;
+               /* text-align: right;*/
+               padding: 10px 20px 0px 20px;
+            }
+            .title span {
+                color: #007cae;
+            }
+            .details {
+                padding: 10px 20px 0px 20px;
+                text-align: left !important;
+                /*margin-left: 40%;*/
+            }
+            .hrItem {
+                border: none;
+                height: 1px;
+                /* Set the hr color */
+                color: #333; /* old IE */
+                background-color: #fff; /* Modern Browsers */
+            }
+        </style>
+    </head>
+    <body>
+        <div class='wrapper'>
+            <div class='header'>
+                <p class='title'>Customer Summary - {{ customer.cust_name}}</p>
+            </div>
+            <hr class='hrItem' />
+        </div>
+        <div class='details'>
+            {% if products %}
+            <div class="row">
+                <h2><u>Products Information</u></h2>
+            </div>
+            <div class="row">
+                <table style="border: 1px solid black">
+                    <thead>
+                        <tr align="left">
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Pickup Time</th>
+                            <th>Total Charge</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>{{ product.product }}</td>
+                            <td>{{ product.quantity|intcomma }}</td>
+                            <td>{{ product.pickup_time }}</td>
+                            <td>{{ product.charge|intcomma }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="3" align="right"><b>Total of Product Charges</b></td>
+                            <td>{{ sum_product_charge.charge__sum|intcomma }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+            {% if services %}
+            <div class="row">
+                <h2><u>Services Information</u></h2>
+            </div>
+            <div class="row">
+                <table style="border: 1px solid black">
+                    <thead>
+                        <tr align="left">
+                            <th>Service Category</th>
+                            <th>Location</th>
+                            <th>Setup Time</th>
+                            <th>Cleanup Time</th>
+                            <th>Service Charge</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for service in services %}
+                        <tr>
+                            <td>{{ service.service_category }}</td>
+                            <td>{{ service.location }}</td>
+                            <td>{{ service.setup_time }}</td>
+                            <td>{{ service.cleanup_time }}</td>
+                            <td>{{ service.service_charge|intcomma }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="4" align="right"><b>Total of Service Charges</b></td>
+                            <td>{{ sum_service_charge.service_charge__sum|intcomma }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+            <div class="row">
+                <br>
+                {% if products and services%}
+                         <span><b>Total: {{ sum_product_charge.charge__sum|addition:sum_service_charge.service_charge__sum }} </b></span>
+                {% elif products %}
+                        <span><b>Total: {{ sum_product_charge.charge__sum }} </b></span>
+                {% elif services %}
+                        <span><b>Total: {{ sum_service_charge.service_charge__sum }} </b></span>
+                {% endif %}
+                <br>
+            </div>
+            <hr class='hrItem' />
+        </div>
+    </body>
+</html>

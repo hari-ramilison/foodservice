@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
+from .utils import *
 
 now = timezone.now()
 def home(request):
@@ -174,11 +175,13 @@ def summary(request, pk):
     products = Product.objects.filter(cust_name=pk)
     sum_service_charge = Service.objects.filter(cust_name=pk).aggregate(Sum('service_charge'))
     sum_product_charge = Product.objects.filter(cust_name=pk).aggregate(Sum('charge'))
+    sum_of_totals = Sum(sum_service_charge, sum_product_charge)
     return render(request, 'crm/summary.html', {'customer': customer,
                                                     'products': products,
                                                     'services': services,
                                                     'sum_service_charge': sum_service_charge,
-                                                    'sum_product_charge': sum_product_charge,})
+                                                    'sum_product_charge': sum_product_charge,
+                                                    'sum_of_totals': sum_of_totals,})
 
 def register(request):
     if request.method == 'POST':
@@ -199,3 +202,33 @@ def register(request):
     return render(request,
                   'crm/register.html',
                   {'user_form': user_form})
+
+def customer_summary_pdf(request, pk):
+        template = get_template('report/customer_summary_pdf.html')
+        customer = get_object_or_404(Customer, pk=pk)
+        customers = Customer.objects.filter(created_date__lte=timezone.now())
+        customers = Customer.objects.filter(cust_name=pk)
+        services = Service.objects.filter(cust_name=pk)
+        products = Product.objects.filter(cust_name=pk)
+        sum_service_charge = Service.objects.filter(cust_name=pk).aggregate(Sum('service_charge'))
+        sum_product_charge = Product.objects.filter(cust_name=pk).aggregate(Sum('charge'))
+        data = {
+                'customer': customer,
+                'products': products,
+                'services': services,
+                'sum_service_charge': sum_service_charge,
+                'sum_product_charge': sum_product_charge,
+        }
+        pdf = render_to_pdf('report/customer_summary_pdf.html', data)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "Summary_%s.pdf" % ("12341231")
+            content = "inline; filename='%s'" % (filename)
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" % (filename)
+            response['Content-Disposition'] = content
+            return response
+            return HttpResponse("Not found")
+
+        return HttpResponse(pdf, content_type='application/pdf')

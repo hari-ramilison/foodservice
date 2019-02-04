@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = '%6zlq1d4139-+7%)mj3b6ojw&ocr(t-)zmc)@wa592rakc*&^_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -79,8 +81,12 @@ WSGI_APPLICATION = 'mfscrm.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd8mb09ep0n0823',
+        'USER': 'twapbxykmqgtwy',
+        'PASSWORD': '33f66843dd56c3e431e412006a9f89abaf2e171f3b5e44ed3e8ce205a1da8769',
+        'HOST': 'postgres://twapbxykmqgtwy:33f66843dd56c3e431e412006a9f89abaf2e171f3b5e44ed3e8ce205a1da8769@ec2-54-225-89-195.compute-1.amazonaws.com:5432/d8mb09ep0n0823',
+        'PORT': '5432',
     }
 }
 
@@ -121,17 +127,50 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+# Update database configuration with $DATABASE_URL.
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+DATABASES['default'] = dj_database_url.config()
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+
+#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/home'
 
 #EMAIL_HOST = 'smtp.mailtrap.io'
-#EMAIL_HOST_USER = 'dac13d35b0fa64'
-#EMAIL_HOST_PASSWORD = '1b415d15b7d33a'
+#EMAIL_HOST_USER = 'ab70f475d5672b'
+#EMAIL_HOST_PASSWORD = '140b0b1a4db18d'
 #EMAIL_PORT = 2525
 #EMAIL_USE_TLS = True
-#DEFAULT_FROM_EMAIL = 'Reset Password <hramilison@unomaha.edu>'
+#DEFAULT_FROM_EMAIL = 'Reset Password <app122338443@heroku.com>'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'maverickfoodservice19@gmail.com'
+EMAIL_HOST_PASSWORD = 'MaverickFoodService00'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+#DEFAULT_FROM_EMAIL = 'Reset Password <app122338443@heroku.com>'
+
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

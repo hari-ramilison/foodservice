@@ -5,7 +5,9 @@
     <br><br>
     <div class="row">
         <h1>Customer Summary - {{ customer.cust_name}}</h1>
+        <a href="{% url 'crm:customer_summary_pdf' pk=customer.pk %}">PDF Report</a>
     </div>
+    {% if products %}
     <div class="row">
         <h2>Product Information<br><br></h2>
     </div>
@@ -31,24 +33,15 @@
                     <td>{{ product.charge|intcomma }}</td>
                 </tr>
             {% endfor %}
+            <tr>
+                            <td colspan="4" align="right"><b>Total of Product Charges</b></td>
+                            <td align="center">{{ sum_product_charge.charge__sum|intcomma }}</td>
+                        </tr>
             </tbody>
         </table>
     </div>
-    <div class="row">
-        <table class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr class="bg-info">
-                    <th>Total of Product Charges</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td align="right">{{ sum_product_charge.charge__sum|intcomma }}</td>
-
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    {% endif %}
+    {% if services %}
     <div class="row">
         <h2>Service Information<br><br></h2>
     </div>
@@ -75,20 +68,27 @@
                     <td>{{ service.service_charge|intcomma }}</td>
                 </tr>
             {% endfor %}
+            <tr>
+                            <td colspan="5" align="right"><b>Total of Service Charges</b></td>
+                            <td align="center">{{ sum_service_charge.service_charge__sum|intcomma }}</td>
+                        </tr>
             </tbody>
         </table>
     </div>
+    {% endif %}
     <div class="row">
         <table class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr class="bg-info">
-                    <th>Total of Service Charges</th>
-                </tr>
-            </thead>
             <tbody>
                 <tr>
-                    <td align="right">{{ sum_service_charge.service_charge__sum|intcomma }}</td>
-
+                    <td align="right">
+                        {% if products and services%}
+                            <span><b>Total: {{ sum_product_charge.charge__sum|addition:sum_service_charge.service_charge__sum }} </b></span>
+                        {% elif products %}
+                            <span><b>Total: {{ sum_product_charge.charge__sum }} </b></span>
+                        {% elif services %}
+                            <span><b>Total: {{ sum_service_charge.service_charge__sum }} </b></span>
+                        {% endif %}
+                    </td>
                 </tr>
             </tbody>
         </table>

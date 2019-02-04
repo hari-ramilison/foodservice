@@ -20,7 +20,8 @@ urlpatterns = [
     path('product/<int:pk>/edit/', views.product_edit, name='product_edit'),
 
     path('customer/<int:pk>/summary/', views.summary, name='summary'),
-
     path('register/', views.register, name='register'),
+
+    path(r'^pdf/<int:pk>/$', views.customer_summary_pdf, name='customer_summary_pdf'),
 
 ]
